@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Country Time Converter</title>
+    <title>City Clock</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -29,55 +29,51 @@
 </head>
 <body>
 
-    <h1>🌍 Country Time Converter</h1>
-    <p id="localTime">⏳ Your Current Date & Time: Loading...</p>
+    <h1>City Clock</h1>
+    <p id="localTime">Your Current Date & Time: Loading...</p>
 
-    <h2>Enter a Country Name</h2>
-    <input type="text" id="countryInput" placeholder="E.g., United States, Japan, India">
-    <button onclick="convertTime()">Convert</button>
+    <h2>Enter a City Name</h2>
+    <input type="text" id="cityInput" placeholder="Examples: New_York, Paris, Tokyo, Sydney">
+    <button onclick="convertTime()">Show Time</button>
 
     <p id="convertedTime"></p>
 
     <script>
-        // Function to display local time
+
         function showLocalTime() {
             let localTime = new Date().toLocaleString();
             let localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-            document.getElementById("localTime").innerText = `⏳ Your Current Date & Time (${localTimeZone}): ${localTime}`;
+            document.getElementById("localTime").innerText = `Your Current Date & Time (${localTimeZone}): ${localTime}`;
         }
 
-        // Function to get the timezone and convert time
         async function convertTime() {
-            let country = document.getElementById("countryInput").value.trim();
-            if (!country) {
-                alert("Please enter a valid country name.");
+            let city = document.getElementById("cityInput").value.trim();
+            if (!city) {
+                alert("Please enter a city name.");
                 return;
             }
 
             try {
-                // Use the World Time API to fetch time zone information
                 let response = await fetch(`https://worldtimeapi.org/api/timezone`);
                 let timezones = await response.json();
 
-                // Find the best match for the user's input
-                let matchingTimezone = timezones.find(zone => zone.toLowerCase().includes(country.toLowerCase()));
+                let matchingTimezone = timezones.find(zone => zone.toLowerCase().includes(city.toLowerCase()));
 
                 if (matchingTimezone) {
-                    let countryTimeResponse = await fetch(`https://worldtimeapi.org/api/timezone/${matchingTimezone}`);
-                    let countryTimeData = await countryTimeResponse.json();
+                    let cityTimeResponse = await fetch(`https://worldtimeapi.org/api/timezone/${matchingTimezone}`);
+                    let cityTimeData = await cityTimeResponse.json();
                     
-                    let countryTime = new Date(countryTimeData.datetime).toLocaleString('en-US', { timeZone: matchingTimezone });
+                    let cityTime = new Date(cityTimeData.datetime).toLocaleString('en-US', { timeZone: matchingTimezone });
 
-                    document.getElementById("convertedTime").innerText = `🕒 Current Date & Time in ${country} (${matchingTimezone}): ${countryTime}`;
+                    document.getElementById("convertedTime").innerText = `Current Date & Time in ${city} (${matchingTimezone}): ${cityTime}`;
                 } else {
-                    document.getElementById("convertedTime").innerText = "❌ Could not determine the time zone for this country.";
+                    document.getElementById("convertedTime").innerText = "Could not determine the time zone for this country.";
                 }
             } catch (error) {
-                document.getElementById("convertedTime").innerText = "⚠️ Error: Could not fetch time information.";
+                document.getElementById("convertedTime").innerText = "Error: Could not fetch time information.";
             }
         }
 
-        // Show local time when the page loads
         showLocalTime();
     </script>
 
