@@ -67,7 +67,7 @@
 
                     document.getElementById("convertedTime").innerText = `Current Date & Time in ${city} (${matchingTimezone}): ${cityTime}`;
                 } else {
-                    document.getElementById("convertedTime").innerText = "Could not determine the time zone for this country.";
+                    document.getElementById("convertedTime").innerText = "Could not determine the time zone for this city.";
                 }
             } catch (error) {
                 document.getElementById("convertedTime").innerText = "Error: Could not fetch time information.";
